@@ -6,6 +6,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.todoapp.common.base.BaseAdapter
 import com.example.todoapp.common.base.BaseFragment
 import com.example.todoapp.common.extensions.createProgressDialog
+import com.example.todoapp.common.extensions.setBackgroundColor
 import com.example.todoapp.databinding.FragmentHomeBinding
 import com.example.todoapp.databinding.ItemNoteBinding
 import com.example.todoapp.domain.model.NoteUiModel
@@ -20,7 +21,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(FragmentHom
     private val notesAdapter by lazy {
         BaseAdapter<NoteUiModel, ItemNoteBinding>(ItemNoteBinding::inflate) { itemNoteBinding, i ->
             notes = itemNoteBinding
-            Log.e("TAG", ": $i", )
+            itemNote.setBackgroundColor()
         }
     }
 

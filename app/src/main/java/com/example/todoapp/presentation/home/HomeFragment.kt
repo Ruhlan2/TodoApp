@@ -1,11 +1,14 @@
 package com.example.todoapp.presentation.home
 
 import android.util.Log
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.common.base.BaseAdapter
 import com.example.todoapp.common.base.BaseFragment
 import com.example.todoapp.common.extensions.createProgressDialog
+import com.example.todoapp.common.extensions.gone
+import com.example.todoapp.common.extensions.visible
 import com.example.todoapp.databinding.FragmentHomeBinding
 import com.example.todoapp.databinding.ItemNoteBinding
 import com.example.todoapp.domain.model.NoteUiModel
@@ -39,23 +42,28 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(FragmentHom
     }
 
     override fun observeData() {
-        val pd =requireActivity().createProgressDialog()
-        viewmodel.state.observe(viewLifecycleOwner){
-           when(it){
-               is HomeUiState.Failure->{
-                    pd.cancel()
-                   FancyToast.makeText(requireContext(),it.message,FancyToast.LENGTH_SHORT,FancyToast.INFO,false).show()
-               }
-               is HomeUiState.Loading->{
-                   pd.show()
-               }
-               is HomeUiState.Success->{
-                   pd.cancel()
-                   notesAdapter.submitList(it.list)
-               }
-               else -> {}
-           }
-       }
+        with(binding){
+            val pd =requireActivity().createProgressDialog()
+            viewmodel.state.observe(viewLifecycleOwner){
+                when(it){
+                    is HomeUiState.Failure->{
+                        pd.cancel()
+                        FancyToast.makeText(requireContext(),it.message,FancyToast.LENGTH_SHORT,FancyToast.INFO,false).show()
+                    }
+                    is HomeUiState.Loading->{
+                        pd.show()
+                    }
+                    is HomeUiState.Success->{
+                        pd.cancel()
+                        notesAdapter.submitList(it.list)
+                        if (notesAdapter.itemCount<=0&&notesRv.isVisible) emptyLayout.visible()
+                        else emptyLayout.gone()
+
+                    }
+                    else -> Unit
+                }
+            }
+        }
     }
 
     private fun setRv(){

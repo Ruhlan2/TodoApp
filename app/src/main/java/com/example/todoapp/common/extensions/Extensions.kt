@@ -5,9 +5,19 @@ import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import com.example.todoapp.databinding.LayoutLoadingBinding
 
 
+fun View.visible(){
+    this.visibility=View.VISIBLE
+}
+fun View.invisible(){
+    this.visibility=View.INVISIBLE
+}
+fun View.gone(){
+    this.visibility=View.GONE
+}
 fun Context.createProgressDialog():Dialog{
 
     val dialog=Dialog(this)

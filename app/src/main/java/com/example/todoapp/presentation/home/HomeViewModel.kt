@@ -61,6 +61,22 @@ class HomeViewModel @Inject constructor(
         }
         insertData(listOf(NoteEntity(title,desc)))
     }
+
+    fun searchNote(title: String){
+        viewModelScope.launch {
+            useCase.searchNote(title).handleResult(
+                onComplete = {
+                    setState(HomeUiState.Success(it))
+                },
+                onLoading = {
+
+                },
+                onError = {
+                    setState(HomeUiState.Failure(it.localizedMessage as String))
+                }
+            )
+        }
+    }
 }
 
 sealed class HomeUiState:State{

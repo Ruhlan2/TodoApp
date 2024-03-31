@@ -14,6 +14,10 @@ class LocalDataSourceImpl @Inject constructor(
         service.insertNote(list)
     }
 
+    override suspend fun searchNote(title: String): Resource<List<NoteEntity>> =handleResponse {
+        service.searchNote(title)
+    }
+
 
     private suspend fun <T> handleResponse(response : suspend()->T):Resource<T>{
         return try {

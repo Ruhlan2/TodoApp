@@ -5,4 +5,6 @@
     <string name="notes">Notes</string>
     <string name="create_your_first_note">Create your first note !</string>
     <string name="error_message">Please fill all blanks</string>
+    <string name="search_by_the_keyword">Search by the keyword...</string>
+    <string name="file_not_found">File not found. Try searching again.</string>
 </resources>

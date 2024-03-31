@@ -26,7 +26,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(FragmentHom
             Log.e("TAG", ": $i", )
         }
     }
-
     override fun onViewCreateFinished() {
         setRv()
         setup()
@@ -37,6 +36,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(FragmentHom
         with(binding){
             buttonAdd.setOnClickListener {
                 findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment())
+            }
+            ButtonSearch.setOnClickListener {
+                findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToSearchFragment())
             }
         }
     }

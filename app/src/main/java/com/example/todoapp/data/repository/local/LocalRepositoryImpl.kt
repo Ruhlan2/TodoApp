@@ -27,4 +27,13 @@ class LocalRepositoryImpl @Inject constructor(
         source.insertNote(list)
     }
 
+    override suspend fun searchNote(title: String): Flow<Resource<List<NoteUiModel>>> = flow {
+        emit(Resource.Loading)
+        when(val response=source.searchNote(title)){
+            is Resource.Error->emit(Resource.Error(response.throwable))
+            is Resource.Loading->Unit
+            is Resource.Success->emit(Resource.Success(response.result.toListNoteUiModel()))
+        }
+    }
+
 }

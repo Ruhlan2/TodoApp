@@ -12,5 +12,6 @@ class NoteUseCase @Inject constructor(
 
     suspend fun insertNote(list:List<NoteEntity>)=repository.insertNote(list)
 
+    suspend fun searchNote(title:String)=repository.searchNote(title)
 
 }

@@ -2,6 +2,7 @@ package com.example.todoapp.data.source.local
 
 import com.example.todoapp.common.network.Resource
 import com.example.todoapp.data.dto.local.NoteEntity
+import com.example.todoapp.data.mapper.toListNoteUiModel
 import com.example.todoapp.data.service.local.NotesDAO
 import javax.inject.Inject
 

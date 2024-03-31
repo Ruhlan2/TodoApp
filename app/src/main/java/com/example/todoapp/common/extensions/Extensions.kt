@@ -6,10 +6,21 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.View
 import androidx.cardview.widget.CardView
 import com.example.todoapp.databinding.LayoutLoadingBinding
 import kotlin.random.Random
 
+
+fun View.visible(){
+    this.visibility=View.VISIBLE
+}
+fun View.invisible(){
+    this.visibility=View.INVISIBLE
+}
+fun View.gone(){
+    this.visibility=View.GONE
+}
 
 fun Context.createProgressDialog():Dialog{
 

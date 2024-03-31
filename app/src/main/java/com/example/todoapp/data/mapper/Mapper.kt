@@ -11,3 +11,12 @@ fun NoteEntity?.toNoteUiModel()=NoteUiModel(
 fun List<NoteEntity?>?.toListNoteUiModel()=this?.map {
     it.toNoteUiModel()
 }.orEmpty()
+
+fun NoteUiModel.toNoteDTO(noteId:Int)=NoteEntity(
+    title = title,
+    description=description,
+    id = noteId
+)
+fun List<NoteUiModel>.toLocalDatabaseList()=mapIndexed { index, noteUiModel ->
+    noteUiModel.toNoteDTO(index)
+}

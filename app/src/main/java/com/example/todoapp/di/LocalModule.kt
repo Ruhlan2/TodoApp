@@ -9,6 +9,7 @@ import com.example.todoapp.data.service.local.NotesDAO
 import com.example.todoapp.data.source.local.LocalDataSource
 import com.example.todoapp.data.source.local.LocalDataSourceImpl
 import com.example.todoapp.domain.repository.LocalRepository
+import com.example.todoapp.domain.useCase.CheckNoteUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -43,4 +44,8 @@ object LocalModule {
     @Provides
     fun injectLocalRepository(source: LocalDataSource)=LocalRepositoryImpl(source) as LocalRepository
 
+
+    @Singleton
+    @Provides
+    fun injectCheckUseCase()=CheckNoteUseCase()
 }

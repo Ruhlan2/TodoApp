@@ -1,10 +1,12 @@
 package com.example.todoapp.presentation.home
 
 import androidx.lifecycle.viewModelScope
+import com.example.todoapp.R
 import com.example.todoapp.common.base.BaseViewModel
 import com.example.todoapp.common.base.State
 import com.example.todoapp.data.dto.local.NoteEntity
 import com.example.todoapp.domain.model.NoteUiModel
+import com.example.todoapp.domain.useCase.CheckNoteUseCase
 import com.example.todoapp.domain.useCase.NoteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -12,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val useCase:NoteUseCase
+    private val useCase:NoteUseCase,
+    private val checkNoteUseCase: CheckNoteUseCase
 ) : BaseViewModel<HomeUiState>() {
 
 
@@ -32,11 +35,31 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun insertData(list: List<NoteEntity>){
+    private fun insertData(list: List<NoteEntity>){
         viewModelScope.launch {
             useCase.insertNote(list)
             getAllData()
+            setState(HomeUiState.SuccessSave)
         }
+    }
+
+    fun saveNote(
+        title:String,
+        desc:String
+    ){
+        val execute=checkNoteUseCase.executeFields(title,desc)
+        val errorMessage=execute.errorMessage?:R.string.notes
+
+        if (!execute.success){
+            setState(
+                HomeUiState.CheckError(
+                    errorMessage
+                )
+            )
+
+            return
+        }
+        insertData(listOf(NoteEntity(title,desc)))
     }
 }
 
@@ -47,4 +70,8 @@ sealed class HomeUiState:State{
     data class Failure(val message:String):HomeUiState()
 
     data object Loading:HomeUiState()
+
+    data class CheckError(val message:Int):HomeUiState()
+
+    data object SuccessSave:HomeUiState()
 }

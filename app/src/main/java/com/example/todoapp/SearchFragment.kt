@@ -5,6 +5,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.todoapp.common.base.BaseAdapter
 import com.example.todoapp.common.base.BaseFragment
 import com.example.todoapp.common.extensions.gone
@@ -16,6 +17,9 @@ import com.example.todoapp.presentation.home.HomeUiState
 import com.example.todoapp.presentation.home.HomeViewModel
 import com.shashank.sony.fancytoastlib.FancyToast
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SearchFragment : BaseFragment<FragmentSearchBinding,HomeViewModel>(FragmentSearchBinding::inflate) {
@@ -25,7 +29,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding,HomeViewModel>(Fragmen
     private val searchAdapter by lazy {
         BaseAdapter<NoteUiModel, ItemNoteBinding>(ItemNoteBinding::inflate) { itemNoteBinding, i ->
             notes = itemNoteBinding
-            Log.e("TAG", ": $i", )
         }
     }
     override fun onViewCreateFinished() {
@@ -39,14 +42,16 @@ class SearchFragment : BaseFragment<FragmentSearchBinding,HomeViewModel>(Fragmen
 
     private fun searchNote() {
         with(binding){
-            searchIE.requestFocus()
-            searchIE.addTextChangedListener {
-                val search=it?.toString()
-                if (!search.isNullOrEmpty()) viewmodel.searchNote(search)
-                else {
-                    viewmodel.getAllData()
-                    noteRv.visible()
-                }
+                searchIE.addTextChangedListener {
+                    val search=it?.toString()
+
+                    if (!search.isNullOrEmpty()) {
+                        viewmodel.searchNote(search)
+                    }
+                    else {
+                        //viewmodel.getAllData()
+                    }
+
             }
         }
     }
@@ -54,11 +59,11 @@ class SearchFragment : BaseFragment<FragmentSearchBinding,HomeViewModel>(Fragmen
     override fun observeData() {
         viewmodel.state.observe(viewLifecycleOwner){
             when(it){
-                is HomeUiState.Success->{
+                is HomeUiState.SearchSuccess->{
                     searchAdapter.submitList(it.list)
                     with(binding){
-                        if (searchAdapter.itemCount<=0&&noteRv.isGone) emptyLayout.visible()
-                        else emptyLayout.gone()
+                      
+
                     }
                 }
                 is HomeUiState.Failure->{

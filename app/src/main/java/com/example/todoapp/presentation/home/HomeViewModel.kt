@@ -62,11 +62,11 @@ class HomeViewModel @Inject constructor(
         insertData(listOf(NoteEntity(title,desc)))
     }
 
-    fun searchNote(title: String){
+     fun searchNote(title: String){
         viewModelScope.launch {
             useCase.searchNote(title).handleResult(
                 onComplete = {
-                    setState(HomeUiState.Success(it))
+                    setState(HomeUiState.SearchSuccess(it))
                 },
                 onLoading = {
 
@@ -76,6 +76,12 @@ class HomeViewModel @Inject constructor(
                 }
             )
         }
+    }
+
+    fun checkQuery(title:String?){
+        if (!title.isNullOrBlank()){
+            searchNote(title)
+        }else getAllData()
     }
 }
 
@@ -90,4 +96,5 @@ sealed class HomeUiState:State{
     data class CheckError(val message:Int):HomeUiState()
 
     data object SuccessSave:HomeUiState()
+    data class SearchSuccess(val list:List<NoteUiModel>):HomeUiState()
 }

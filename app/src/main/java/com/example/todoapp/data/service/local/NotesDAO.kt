@@ -21,7 +21,7 @@ interface NotesDAO {
     @Query("DELETE  FROM noteentity WHERE id=:noteID")
     suspend fun deleteNote(noteID:Int)
 
-    @Query("SELECT * FROM noteentity WHERE title_note=:title")
+    @Query("SELECT * FROM noteentity WHERE noteentity.title_note LIKE :title")
     suspend fun searchNote(title:String):List<NoteEntity>
 
 

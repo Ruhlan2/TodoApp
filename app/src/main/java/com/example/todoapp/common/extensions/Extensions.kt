@@ -7,6 +7,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import com.example.todoapp.databinding.LayoutLoadingBinding
+import com.shashank.sony.fancytoastlib.FancyToast
+import org.w3c.dom.Text
 
 
 fun View.visible(){
@@ -28,4 +30,8 @@ fun Context.createProgressDialog():Dialog{
     dialog.setContentView(binding.root)
 
     return dialog
+}
+
+fun Context.showShortInfoMessage(message:String){
+    FancyToast.makeText(this,message,FancyToast.LENGTH_SHORT,FancyToast.INFO,false).show()
 }

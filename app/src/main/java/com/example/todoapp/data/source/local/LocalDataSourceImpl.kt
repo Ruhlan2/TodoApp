@@ -10,12 +10,16 @@ class LocalDataSourceImpl @Inject constructor(
 ) :LocalDataSource{
 
     override suspend fun getAll(): Resource<List<NoteEntity>> =handleResponse { service.getAll() }
-    override suspend fun insertNote(list: List<NoteEntity>) {
+    override suspend fun insertNote(list: NoteEntity) {
         service.insertNote(list)
     }
 
     override suspend fun searchNote(title: String): Resource<List<NoteEntity>> =handleResponse {
         service.searchNote(title)
+    }
+
+    override suspend fun deleteNote(id: Int) {
+        service.deleteNote(id)
     }
 
 

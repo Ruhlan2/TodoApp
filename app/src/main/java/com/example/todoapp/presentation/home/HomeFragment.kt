@@ -3,17 +3,22 @@ package com.example.todoapp.presentation.home
 import android.util.Log
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.common.base.BaseAdapter
 import com.example.todoapp.common.base.BaseFragment
 import com.example.todoapp.common.extensions.createProgressDialog
 import com.example.todoapp.common.extensions.gone
+import com.example.todoapp.common.extensions.showShortInfoMessage
 import com.example.todoapp.common.extensions.visible
+import com.example.todoapp.data.dto.local.NoteEntity
+import com.example.todoapp.data.mapper.toNoteEntity
 import com.example.todoapp.databinding.FragmentHomeBinding
 import com.example.todoapp.databinding.ItemNoteBinding
 import com.example.todoapp.domain.model.NoteUiModel
 import com.shashank.sony.fancytoastlib.FancyToast
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.cancel
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(FragmentHomeBinding::inflate){
@@ -23,7 +28,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(FragmentHom
     private val notesAdapter by lazy {
         BaseAdapter<NoteUiModel, ItemNoteBinding>(ItemNoteBinding::inflate) { itemNoteBinding, i ->
             notes = itemNoteBinding
-            Log.e("TAG", ": $i", )
+            root.setOnClickListener {
+                viewmodel.deleteAllNotes(itemNoteBinding.id)
+            }
         }
     }
     override fun onViewCreateFinished() {
@@ -42,7 +49,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(FragmentHom
             }
         }
     }
-
     override fun observeData() {
         with(binding){
             val pd =requireActivity().createProgressDialog()
@@ -58,9 +64,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel>(FragmentHom
                     is HomeUiState.Success->{
                         pd.cancel()
                         notesAdapter.submitList(it.list)
-                        if (notesAdapter.itemCount<=0&&notesRv.isVisible) emptyLayout.visible()
-                        else emptyLayout.gone()
+                        if (notesAdapter.itemCount<=0){
+                            emptyLayout.visible()
+                            notesRv.gone()
 
+                        }
+                        else {
+                            emptyLayout.gone()
+                            notesRv.visible()
+                        }
+
+                    }
+                    is HomeUiState.DeleteSuccess->{
+                        context?.showShortInfoMessage("Successfully deleted")
                     }
                     else -> Unit
                 }

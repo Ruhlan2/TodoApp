@@ -10,6 +10,8 @@ import com.example.todoapp.common.base.BaseAdapter
 import com.example.todoapp.common.base.BaseFragment
 import com.example.todoapp.common.extensions.gone
 import com.example.todoapp.common.extensions.visible
+import com.example.todoapp.data.dto.local.NoteEntity
+import com.example.todoapp.data.mapper.toNoteEntity
 import com.example.todoapp.databinding.FragmentSearchBinding
 import com.example.todoapp.databinding.ItemNoteBinding
 import com.example.todoapp.domain.model.NoteUiModel
@@ -31,9 +33,10 @@ class SearchFragment : BaseFragment<FragmentSearchBinding,HomeViewModel>(Fragmen
             notes = itemNoteBinding
         }
     }
+    var jobs:Job?=null
     override fun onViewCreateFinished() {
-        searchNote()
         setRv()
+        searchNote()
     }
 
     private fun setRv() {
@@ -44,12 +47,14 @@ class SearchFragment : BaseFragment<FragmentSearchBinding,HomeViewModel>(Fragmen
         with(binding){
                 searchIE.addTextChangedListener {
                     val search=it?.toString()
-
+                    jobs?.cancel()
                     if (!search.isNullOrEmpty()) {
-                        viewmodel.searchNote(search)
-                    }
-                    else {
-                        //viewmodel.getAllData()
+                        jobs=lifecycleScope.launch {
+                            delay(400)
+                            viewmodel.searchNote(search)
+                        }
+                    }else{
+                       viewmodel.getAllData()
                     }
 
             }
@@ -62,8 +67,14 @@ class SearchFragment : BaseFragment<FragmentSearchBinding,HomeViewModel>(Fragmen
                 is HomeUiState.SearchSuccess->{
                     searchAdapter.submitList(it.list)
                     with(binding){
-                      
+                        if (searchAdapter.itemCount<=0){
+                            emptyLayout.visible()
+                            noteRv.gone()
+                        }else{
+                            noteRv.visible()
+                            emptyLayout.gone()
 
+                        }
                     }
                 }
                 is HomeUiState.Failure->{

@@ -36,58 +36,76 @@
             android:hint="@string/search_by_the_keyword"
             android:textColor="@color/white"
             android:textColorHint="@color/search_hint"
-            android:textSize="20sp">
+            android:textSize="20sp"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:maxLines="1">
 
         </com.google.android.material.textfield.TextInputEditText>
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/emptyLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchIL">
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="92dp"
-            android:paddingHorizontal="50dp"
-            android:src="@drawable/empty_search"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.478"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/nunito_light"
-            android:text="@string/file_not_found"
-            android:textColor="@color/white"
-            android:textSize="20sp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/emptyLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="92dp"
+                android:paddingHorizontal="50dp"
+                android:src="@drawable/empty_search"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.478"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_light"
+                android:text="@string/file_not_found"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/noteRv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/emptyLayout"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/item_note" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/noteRv"
-        android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_note"
-        app:layout_constraintTop_toBottomOf="@+id/searchIL" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

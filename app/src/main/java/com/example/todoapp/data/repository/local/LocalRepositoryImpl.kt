@@ -3,6 +3,7 @@ package com.example.todoapp.data.repository.local
 import com.example.todoapp.common.network.Resource
 import com.example.todoapp.data.dto.local.NoteEntity
 import com.example.todoapp.data.mapper.toListNoteUiModel
+import com.example.todoapp.data.mapper.toNoteEntity
 import com.example.todoapp.data.source.local.LocalDataSource
 import com.example.todoapp.domain.model.NoteUiModel
 import com.example.todoapp.domain.repository.LocalRepository
@@ -23,7 +24,7 @@ class LocalRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun insertNote(list: List<NoteEntity>) {
+    override suspend fun insertNote(list: NoteEntity) {
         source.insertNote(list)
     }
 
@@ -35,5 +36,10 @@ class LocalRepositoryImpl @Inject constructor(
             is Resource.Success->emit(Resource.Success(response.result.toListNoteUiModel()))
         }
     }
+
+    override suspend fun deleteNote(id: Int) {
+        source.deleteNote(id)
+    }
+
 
 }

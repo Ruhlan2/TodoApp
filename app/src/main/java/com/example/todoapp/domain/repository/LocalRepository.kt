@@ -9,7 +9,9 @@ interface LocalRepository {
 
     suspend fun getAll():kotlinx.coroutines.flow.Flow<Resource<List<NoteUiModel>>>
 
-    suspend fun insertNote(list: List<NoteEntity>)
+    suspend fun insertNote(list: NoteEntity)
 
     suspend fun searchNote(title:String):kotlinx.coroutines.flow.Flow<Resource<List<NoteUiModel>>>
+
+    suspend fun deleteNote(id:Int)
 }

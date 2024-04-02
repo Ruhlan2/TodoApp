@@ -10,9 +10,8 @@ import androidx.viewbinding.ViewBinding
 
 class BaseAdapter<Data:Any,ItemViewBinding:ViewBinding>(
     private val inflater: Inflater<ItemViewBinding>,
-    private val onBind:ItemViewBinding.(Data,Int)->Unit
+    private val onBind:ItemViewBinding.(Data,Int)->Unit,
 ):ListAdapter<Data,BaseAdapter.GeneralViewHolder<ItemViewBinding>>(GeneralItemCallback<Data>()){
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int

@@ -2,7 +2,9 @@ package com.example.todoapp.presentation.note
 
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
+import com.example.todoapp.R
 import com.example.todoapp.common.base.BaseFragment
 import com.example.todoapp.data.dto.local.NoteEntity
 import com.example.todoapp.databinding.FragmentCreateNoteBinding
@@ -17,14 +19,13 @@ class CreateNoteFragment : BaseFragment<FragmentCreateNoteBinding,HomeViewModel>
 
     override fun onViewCreateFinished() {
         setup()
-
     }
 
     override fun observeData() {
         viewmodel.state.observe(viewLifecycleOwner){
             when(it){
                 is HomeUiState.CheckError->{
-                    Toast.makeText(requireContext(),"Error",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(),resources.getString(R.string.error_message),Toast.LENGTH_SHORT).show()
                 }
                 is HomeUiState.SuccessSave->{
                     findNavController().popBackStack()

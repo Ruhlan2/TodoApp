@@ -8,7 +8,9 @@ interface LocalDataSource {
 
     suspend fun getAll():Resource<List<NoteEntity>>
 
-    suspend fun insertNote(list: List<NoteEntity>)
+    suspend fun insertNote(list: NoteEntity)
 
     suspend fun searchNote(title:String):Resource<List<NoteEntity>>
+
+    suspend fun deleteNote(id:Int)
 }

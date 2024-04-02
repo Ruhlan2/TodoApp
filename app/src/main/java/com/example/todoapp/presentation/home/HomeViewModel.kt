@@ -1,10 +1,13 @@
 package com.example.todoapp.presentation.home
 
 import androidx.lifecycle.viewModelScope
+import androidx.room.Delete
 import com.example.todoapp.R
 import com.example.todoapp.common.base.BaseViewModel
 import com.example.todoapp.common.base.State
+import com.example.todoapp.common.network.Resource
 import com.example.todoapp.data.dto.local.NoteEntity
+import com.example.todoapp.data.mapper.toNoteEntity
 import com.example.todoapp.domain.model.NoteUiModel
 import com.example.todoapp.domain.useCase.CheckNoteUseCase
 import com.example.todoapp.domain.useCase.NoteUseCase
@@ -18,8 +21,7 @@ class HomeViewModel @Inject constructor(
     private val checkNoteUseCase: CheckNoteUseCase
 ) : BaseViewModel<HomeUiState>() {
 
-
-     fun getAllData(){
+       fun getAllData(){
         viewModelScope.launch {
             useCase.getAll().handleResult(
                 onComplete = {
@@ -34,12 +36,11 @@ class HomeViewModel @Inject constructor(
             )
         }
     }
-
-    private fun insertData(list: List<NoteEntity>){
+    private fun insertData(list: NoteEntity){
         viewModelScope.launch {
             useCase.insertNote(list)
-            getAllData()
             setState(HomeUiState.SuccessSave)
+
         }
     }
 
@@ -59,12 +60,13 @@ class HomeViewModel @Inject constructor(
 
             return
         }
-        insertData(listOf(NoteEntity(title,desc)))
+        insertData((NoteEntity(title,desc)))
+
     }
 
      fun searchNote(title: String){
         viewModelScope.launch {
-            useCase.searchNote(title).handleResult(
+            useCase.searchNote("%$title%").handleResult(
                 onComplete = {
                     setState(HomeUiState.SearchSuccess(it))
                 },
@@ -75,6 +77,14 @@ class HomeViewModel @Inject constructor(
                     setState(HomeUiState.Failure(it.localizedMessage as String))
                 }
             )
+        }
+    }
+
+    fun deleteAllNotes(id: Int){
+        viewModelScope.launch {
+            useCase.deleteNote(id)
+            getAllData()
+            setState(HomeUiState.DeleteSuccess)
         }
     }
 
@@ -97,4 +107,6 @@ sealed class HomeUiState:State{
 
     data object SuccessSave:HomeUiState()
     data class SearchSuccess(val list:List<NoteUiModel>):HomeUiState()
+
+    data object DeleteSuccess:HomeUiState()
 }
